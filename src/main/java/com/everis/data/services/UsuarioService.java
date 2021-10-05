@@ -1,10 +1,13 @@
 package com.everis.data.services;
 
 import java.util.List;
+
 import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.apache.tomcat.util.json.*;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +21,6 @@ public class UsuarioService {
 	private UsuarioRepository ur;
 
 	public List<Usuario> findAll() {
-		// TODO Auto-generated method stub
 		return ur.findAll();
 	}
 	
@@ -26,20 +28,34 @@ public class UsuarioService {
 		ur.deleteById(id);
 	}
 	
+	public Usuario save(@Valid Usuario usuario) {
+		// hash password
+        String hashed = BCrypt.hashpw(usuario.getPassword(), BCrypt.gensalt());
+        usuario.setPassword(hashed);
+        return ur.save(usuario);
+	}
+	
 	public Usuario buscarUsuario(Long id) {
-		
 		Optional<Usuario> oUsuario = ur.findById(id);
-		
 		if(oUsuario.isPresent()) {
 			return oUsuario.get();
 		}
-		
 		return null;
 	}
 	
 	public void modificarUsuario(@Valid Usuario usuario) {
-		
 		ur.save(usuario);
+	}
+
+	public Usuario findByEmail(String email) { //ARREGLAR
+		System.out.println(email);
+		Usuario usuario = ur.findByEmail(email);
+		System.out.println(usuario);
+		if(usuario != null)
+		{
+			return usuario;
+		}
+		return null;
 	}
 
 }
