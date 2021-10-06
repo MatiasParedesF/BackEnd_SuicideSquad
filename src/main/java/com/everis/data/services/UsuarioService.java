@@ -47,9 +47,9 @@ public class UsuarioService {
 		ur.save(usuario);
 	}
 
-	public Usuario findByEmail(String email) { //ARREGLAR
+	public Usuario findOneByEmail(String email) { //ARREGLAR
 		System.out.println(email);
-		Usuario usuario = ur.findByEmail(email);
+		Usuario usuario = ur.findOneByEmail(email);
 		System.out.println(usuario);
 		if(usuario != null)
 		{

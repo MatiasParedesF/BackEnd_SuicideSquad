@@ -22,7 +22,7 @@ public class Curso {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)//auto incrementar
 	private Long id;
 	private String nombre;
-	private String cantidad; //Cantidad de alumnos
+	private Integer cantidad; //Cantidad de alumnos
 
     @Column(updatable=false)
     @CreationTimestamp
@@ -42,7 +42,7 @@ public class Curso {
 	public Curso() {
 		super();
 	}
-	public Curso(Long id, String nombre, String cantidad) {
+	public Curso(Long id, String nombre, Integer cantidad) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -60,10 +60,10 @@ public class Curso {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public String getCantidad() {
+	public Integer getCantidad() {
 		return cantidad;
 	}
-	public void setCantidad(String cantidad) {
+	public void setCantidad(Integer cantidad) {
 		this.cantidad = cantidad;
 	}
 	public Date getCreatedAt() {
