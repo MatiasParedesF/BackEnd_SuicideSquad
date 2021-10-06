@@ -46,7 +46,10 @@ public class UsuarioController {
 		if(usuario == null) {
 			throw new RuntimeException("Usuario no encontrado"+id);
 		}
-		return usuario;
+		else {
+			this.usuarioService.eliminarUsuario(id);
+			return usuario;
+		}
 	}
 
 }
