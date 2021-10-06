@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,32 +15,46 @@ import com.everis.data.models.Curso;
 import com.everis.data.services.CursoService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/cursos")
 public class CursoController {
 
 	@Autowired CursoService cursoService;
 	
-	@GetMapping("/cursos")
-	public List<Curso> obtenerCursos(){
-		return cursoService.findAll();
-		
-	}
-	
-	@PostMapping("/cursos")
+	@PutMapping("/guardar")
 	public Curso guardarCurso(@RequestBody Curso curso) {
-		curso.setId(0L);
-		cursoService.insertarCurso(curso);
-		return curso;
+		
+		Curso NewCurso=this.cursoService.buscarCurso(curso.getId());
+		System.out.println(NewCurso);
+		if(NewCurso==null){
+			return this.cursoService.insertarCurso(curso);
+		}else{
+			throw new RuntimeException("El curso ya existe");
+		}
 		
 	}
 	
-	@DeleteMapping("/cursos/{id}")
+	@GetMapping("/listar")
+	public List<Curso> obtenerCursos(){
+		return this.cursoService.findAll();
+		
+	}
+	
+	@GetMapping("/buscar/{id}")
+	public Curso obtenerCursoById(@PathVariable("id") Long id)
+	{
+		return this.cursoService.buscarCurso(id);
+	}
+	
+	@DeleteMapping("/eliminar/{id}")
 	public Curso obtenerCurso(@PathVariable("id") Long id) {
 		Curso curso=cursoService.buscarCurso(id);
 		if(curso == null) {
 			throw new RuntimeException("Curso no encontrado"+id);
 		}
+		else{
+			this.cursoService.eliminarCurso(id);
+			return curso;
+		}
 		
-		return curso;
 	}
 }
