@@ -12,7 +12,6 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
