@@ -69,16 +69,16 @@ public class UsuarioController {
 				if (doesPasswordMatch)
 				{
 					System.out.println("SE VERIFICO EL USUARIO");
-					return new ResponseEntity<>(HttpStatus.OK);
+					return new ResponseEntity<Usuario>(HttpStatus.OK);
 				}
 				else
 				{
-					return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+					return new ResponseEntity<>(null, HttpStatus.CONFLICT);
 				}
 			}
 			else
 			{
-				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+				return new ResponseEntity<>(null, HttpStatus.CONFLICT);
 
 			}
 		}
