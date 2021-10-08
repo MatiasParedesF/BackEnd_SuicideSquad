@@ -31,11 +31,26 @@ public class CursoController {
 		if(NewCurso==null){
 			return this.cursoService.insertarCurso(curso);
 		}else{
-			throw new RuntimeException("El curso ya existe");
+			throw new RuntimeException("El curso ya existe "+curso.getId());
 		}
 		
 	}
-	
+
+	@PutMapping("/modificar")
+	public Curso modifcarCurso(@RequestBody Curso curso){
+		System.out.println(curso);
+		try{
+			System.out.println(curso);
+			return this.cursoService.insertarCurso(curso);
+		}
+		catch(Exception e){
+
+			throw new RuntimeException("Fallo el modifcado de "+curso.getId());
+
+		}
+
+	}
+
 	@GetMapping("/listar")
 	public List<Curso> obtenerCursos(){
 		return this.cursoService.findAll();

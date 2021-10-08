@@ -18,7 +18,6 @@ public class CursoService {
 	private CursoRepository cr;
 
 	public Curso insertarCurso(@Valid Curso curso) {
-		// TODO Auto-generated method stub
 		return cr.save(curso);
 	}
 

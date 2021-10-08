@@ -29,7 +29,7 @@ public class Usuario {
     private String password;
     @Transient
     private String passwordConfirmation;
-  
+	
 	@Column(updatable=false)
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date createdAt;

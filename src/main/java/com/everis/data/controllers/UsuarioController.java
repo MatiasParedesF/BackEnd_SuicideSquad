@@ -3,15 +3,20 @@ package com.everis.data.controllers;
 
 import java.util.List;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.everis.data.models.Usuario;
@@ -21,13 +26,14 @@ import com.everis.data.services.UsuarioService;
 @RestController
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
-	
+
 	@Autowired 
 	UsuarioService usuarioService;
 	
 	@PutMapping("/guardar")
 	public Usuario guardarUsuario (@RequestBody Usuario usuario)
 	{
+		System.out.println("\n\n\n"+usuario+"\n\n\n");
 		Usuario NewUsuario = this.usuarioService.findOneByEmail(usuario.getEmail()); 
 		System.out.println(NewUsuario);
 		if (NewUsuario==null)
@@ -51,28 +57,40 @@ public class UsuarioController {
 		}
 	}
 
-	@PutMapping("/verificar")
-	public Usuario verificarUsuario (@RequestBody Usuario usuario)
+	@PostMapping("/verificar")
+	public ResponseEntity verificarUsuario (@RequestBody Usuario usuario)
 	{
+		System.out.println("AQUI ESTAMOS EN VERIFICANDO....");
 		try{
 			Usuario UserDB = this.usuarioService.findOneByEmail(usuario.getEmail());
 			if (UserDB != null)
 			{
-				return null; // this.usuarioService.hashCode()
-			}	
+				var doesPasswordMatch = BCrypt.checkpw(usuario.getPassword(), UserDB.getPassword());
+				if (doesPasswordMatch)
+				{
+					System.out.println("SE VERIFICO EL USUARIO");
+					return new ResponseEntity<>(HttpStatus.OK);
+				}
+				else
+				{
+					return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+				}
+			}
 			else
 			{
-				return null;
+				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+
 			}
 		}
 		catch(Exception e) {
-			throw new RuntimeException("Fallo el modificado de "+usuario.getEmail());
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@GetMapping("/listar")
 	public List<Usuario> obtenerUsuarios()
 	{
+		System.out.println("\n\n\n Listado de usuarios \n\n\n");
 		return this.usuarioService.findAll();
 	}
 		
